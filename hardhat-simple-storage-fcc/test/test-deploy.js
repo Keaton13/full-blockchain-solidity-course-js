@@ -26,4 +26,12 @@ describe("SimpleStorage", function () {
       const currentValue = await simpleStorage.retrieve()
       assert.equal(currentValue.toString(), expectedValue)
     })
+    // it("Should add person to people array", async function () {
+    //   const addPerson = await simpleStorage.addPerson("keaton", 13);
+    //   await addPerson.wait(1);
+    //   const currentLength = await simpleStorage.people.length;
+    //   // const updatedLength = await simpleStorage.people.length;
+    //   console.log(currentLength)
+    //   assert.equal(currentLength )
+    // })
 })
