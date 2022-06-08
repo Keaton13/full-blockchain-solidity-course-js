@@ -3,6 +3,7 @@ artifacts
 cache
 .env
 .DS_Store
+../.DS_Store
 coverage
 coverage.json
 typecartifhain
