@@ -1,9 +1,10 @@
 node_modules
+artifacts
+cache
 .env
+.DS_Store
 coverage
 coverage.json
-typechain
-
+typecartifhain
 #Hardhat files
-
 **/.DS_Store
