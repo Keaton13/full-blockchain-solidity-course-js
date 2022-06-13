@@ -1,14 +1,12 @@
+
+const { getNamedAccounts, deployments, network } = require("hardhat")
 const { networkConfig, developmentChains } = require("../helper-hardhat-config")
-const {network} = require("hardhat");
-const { verify } = require("../utils/verify");
+const { verify } = require("../utils/verify")
 
 module.exports = async ({ getNamedAccounts, deployments }) => {
     const { deploy, log } = deployments
     const { deployer } = await getNamedAccounts()
     const chainId = network.config.chainId
-
-    // if chainId is X use y
-    // if chainId is Z use A
 
     let ethUsdPriceFeedAddress
     if (chainId == 31337) {
@@ -17,25 +15,23 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     } else {
         ethUsdPriceFeedAddress = networkConfig[chainId]["ethUsdPriceFeed"]
     }
-
-    // if the contract doesn't exist, we deploy a minimal version of 
-    // for our local testing
-
-
-    // well what happens when we want to change chains?
-    // when going for localhost or hardhat network we want to use a mock
-    const args = [ethUsdPriceFeedAddress]
+    log("----------------------------------------------------")
+    log("Deploying FundMe and waiting for confirmations...")
     const fundMe = await deploy("FundMe", {
         from: deployer,
-        args: args, // put price feed address
+        args: [ethUsdPriceFeedAddress],
         log: true,
+        // we need to wait if on a live network so we can verify properly
         waitConfirmations: network.config.blockConfirmations || 1,
     })
+    log(`FundMe deployed at ${fundMe.address}`)
 
-    if(!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY){
+    if (
+        !developmentChains.includes(network.name) &&
         process.env.ETHERSCAN_API_KEY
-    } else {
-        await verify(fundMe.address, args);
+    ) {
+        await verify(fundMe.address, [ethUsdPriceFeedAddress])
     }
-    log("---------------------------------------------")
 }
+
+module.exports.tags = ["all", "fundme"]
